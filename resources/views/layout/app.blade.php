@@ -15,17 +15,20 @@
 </head>
 
 <body class="hold-transition sidebar-mini">
+    @include('sweetalert::alert')
     <!-- Site wrapper -->
     <div class="wrapper">
+
         <!-- Navbar -->
         @include('layout.inc.nav')
         <!-- /.navbar -->
-        @include('layout.inc.sidebar')
-        <!-- Main Sidebar Container -->
 
+        <!-- Main Sidebar Container -->
+       @include('layout.inc.sidebar')
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
+            @include('sweetalert::alert')
             <!-- Content Header (Page header) -->
             <section class="content-header">
                 <div class="container-fluid">
@@ -61,7 +64,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        @yield('content')
+                       @yield('content')
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer">
@@ -99,6 +102,48 @@
     <script src="{{asset('assets/dist/js/adminlte.min.js')}}"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="{{asset('assets/dist/js/demo.js')}}"></script>
+    {{-- @include('sweetalert::alert', ['cdn' => "https://cdn.jsdelivr.net/npm/sweetalert2@9"]) --}}
+    <script>
+        $('#tambah-row').click(function(){
+            let tbody = $("tbody");
+            let no = tbody.find("tr").length + 1, penerbit = $("#nama_penerbit").val(),
+            judul_buku = $("#buku_id").find("option:selected").text();
+            let newRow = "<tr>";
+                newRow += "<td>"+no+"</td>";
+                newRow += "<td>"+judul_buku+"</td>";
+                newRow += "<td>"+penerbit+"</td>";
+                newRow += "<td><button type='button' class='btn btn-danger btn-sm hapus-row'>Hapus Row</button></td>";
+                newRow += "</tr>"
+            tbody.append(newRow);
+
+            $('.hapus-row').click(function(){
+                $(this).closest('tr').remove();
+            })
+        });
+
+        $('#category_id').change(function(){
+            let category_id = $(this).val(), option="";
+            console.log(category_id);
+            let category_name = $(this).find('option:selected').text();
+
+            $.ajax({
+                type:"get",
+                dataType:"json",
+                url:"/getBuku/" + category_id,
+                success:function(data){
+                    option += "<option value=''>Pilih Judul Buku</option>"
+                    $.each(data.data, function(index, value){
+                        $('#nama_penerbit').val(value.penerbit);
+                        console.log(value);
+                        option += "<option value="+value.id+">"+value.judul+"</option>";
+                    });
+                    $('#buku_id').html(option);
+                    console.log(option);
+                }
+            });
+        });
+
+    </script>
 </body>
 
 </html>

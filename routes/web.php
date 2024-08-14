@@ -31,7 +31,8 @@ Route::resource('dashboard', \App\Http\Controllers\DashboardController::class);
 Route::resource('category', \App\Http\Controllers\CategoryController::class);
 Route::post('actionLogin', [\App\Http\Controllers\LoginController::class, 'actionLogin'])->name('actionLogin');
 Route::resource('book', \App\Http\Controllers\BooksController::class);
-
+Route::resource('pinjam', \App\Http\Controllers\PinjamController::class);
+Route::get('getBuku/{category_id}', [\App\Http\Controllers\AjaxController::class, 'getDataBuku']);
 
 Route::get('/', function () {
     return view('welcome');
