@@ -108,9 +108,10 @@
             let tbody = $("tbody");
             let no = tbody.find("tr").length + 1, penerbit = $("#nama_penerbit").val(),
             judul_buku = $("#buku_id").find("option:selected").text();
+            buku_id = $('#buku_id').val();
             let newRow = "<tr>";
                 newRow += "<td>"+no+"</td>";
-                newRow += "<td>"+judul_buku+"</td>";
+                newRow += "<td>"+judul_buku+"<input type='hidden' name='buku_id[]' id='buku_id' value='"+buku_id+"'></td>";
                 newRow += "<td>"+penerbit+"</td>";
                 newRow += "<td><button type='button' class='btn btn-danger btn-sm hapus-row'>Hapus Row</button></td>";
                 newRow += "</tr>"
@@ -143,6 +144,20 @@
             });
         });
 
+        $('#buku_id').change(function(){
+            const buku_id = $(this).val();
+            $.ajax({
+                url:"/getBook/" + buku_id,
+                type:"get",
+                dataType:"json",
+                success:function(res){
+                    // alert();
+                    console.log(res);
+                    $('#nama_penerbit').val(res.data.penerbit);
+                    // document.write(res);
+                }
+            });
+        });
     </script>
 </body>
 

@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Alert;
 use Illuminate\Http\Request;
 use App\Models\Category;
-
+use App\Models\Anggota;
+use App\Models\Pinjam;
+use App\Models\DetailPinjam;
+use Illuminate\Support\Facades\Auth;
 
 class PinjamController extends Controller
 {
@@ -16,7 +20,7 @@ class PinjamController extends Controller
     public function index()
     {
         // select * from users;
-        $datas =  Category::get();
+        $datas =  Pinjam::with('anggota')->get();
         return view('pinjam.index', compact('datas'));
     }
 
@@ -28,7 +32,13 @@ class PinjamController extends Controller
     public function create()
     {
         $categories = Category::get();
-        return view('pinjam.create', compact('categories'));
+        $anggotas = Anggota::get();
+        $kode_unik = Pinjam::get()->last();
+        $id_pinjam = isset($kode_unik->id) ? ($kode_unik->id == "" ? 1 : $kode_unik->id) : '';
+        $id_pinjam++;
+        $kode_transaksi = "PJM" . date("dmY") . sprintf("%03s", $id_pinjam);
+
+        return view('pinjam.create', compact('categories', 'anggotas', 'kode_transaksi'));
     }
 
     /**
@@ -39,9 +49,25 @@ class PinjamController extends Controller
      */
     public function store(Request $request)
     {
-        $category = new Category();
-        $category->category_name  = $request->category_name;
-        $category->save();
+        $pinjam = Pinjam::create([
+            'kode_transaksi' => $request->kode_transaksi,
+            'anggota_id' => $request->id_anggota,
+            'tgl_pinjam' => $request->tgl_pinjam,
+            'tgl_kembali' => $request->tgl_kembali,
+            'petugas' => (Auth::user()->name ?? 'Dini'),
+
+        ]);
+
+        if ($pinjam) {
+            foreach ($request->buku_id as $key => $val) {
+                DetailPinjam::create([
+                    'buku_id'  => $val,
+                    'pinjam_id' => $pinjam->id,
+                ]);
+            }
+        }
+
+        Alert::success('Good Job', 'Transaksi Pinjam Berhasol di Buat');
 
         // cara ke dua
         // User::create([

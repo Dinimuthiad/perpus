@@ -9,7 +9,21 @@ class AjaxController extends Controller
 {
     public function getDataBuku($category_id)
     {
-        $books = Book::where('category_id', $category_id)->get();
-        return response()->json(['data' => $books, 'message' => 'Fetch Success!!']);
+        try {
+            $books = Book::where('category_id', $category_id)->get();
+            return response()->json(['data' => $books, 'message' => 'Fetch Success!!']);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th->getMessage()]);
+        }
+    }
+
+    public function getBuku($buku_id)
+    {
+        try {
+            $book = Book::where('id', $buku_id)->first();
+            return response()->json(['data' => $book, 'massage' => 'Fetch Success!!']);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th->getMessage()]);
+        }
     }
 }

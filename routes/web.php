@@ -33,6 +33,7 @@ Route::post('actionLogin', [\App\Http\Controllers\LoginController::class, 'actio
 Route::resource('book', \App\Http\Controllers\BooksController::class);
 Route::resource('pinjam', \App\Http\Controllers\PinjamController::class);
 Route::get('getBuku/{category_id}', [\App\Http\Controllers\AjaxController::class, 'getDataBuku']);
+Route::get('getBuku/{buku_id}', [\App\Http\Controllers\AjaxController::class, 'getBuku']);
 
 Route::get('/', function () {
     return view('welcome');

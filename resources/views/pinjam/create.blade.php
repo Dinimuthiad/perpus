@@ -11,7 +11,7 @@
                         <label for="">Kode Transaki</label>
                     </div>
                     <div class="col-sm-6">
-                        <input type="text" name="kode_transaksi" class="form-control" readonly>
+                        <input value="{{$kode_transaksi}}" type="text" name="kode_transaksi" class="form-control" readonly>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -21,6 +21,9 @@
                     <div class="col-sm-6">
                         <select name="id_anggota" id="" class="form-control">
                             <option value="">Pilih Anggota</option>
+                            @foreach ($anggotas as $anggota )
+                            <option value="{{$anggota->id}}">{{$anggota->nama_anggota}}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
@@ -29,7 +32,7 @@
                         <label for="">Tanggal Pinjam</label>
                     </div>
                     <div class="col-sm-6">
-                        <input type="date" name="tgl_pinjam" class="form-control">
+                        <input type="date" name="tgl_pinjam" class="form-control" required>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -37,14 +40,12 @@
                         <label for="">Tanggal Kembali </label>
                     </div>
                     <div class="col-sm-6">
-                        <input type="date" name="tgl_kembali" class="form-control">
+                        <input type="date" name="tgl_kembali" class="form-control" required>
                     </div>
                 </div>
 
             </div>
             <div class="col-sm-6"></div>
-        </div>
-        <div class="col-sm-6"></div>
         </div>
         <div class="form-group row mt-5">
             <div class="col-sm-2">
@@ -93,7 +94,6 @@
 
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Simpan</button>
-
         </div>
     </form>
 @endsection
